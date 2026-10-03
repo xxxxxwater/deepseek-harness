@@ -1,0 +1,67 @@
+name: JEV plugin installation
+
+on:
+  push:
+    branches: [master, feat/jev-decision-layer]
+    paths:
+      - 'plugins/jev-layer/**'
+      - '.github/workflows/jev-plugin.yml'
+  pull_request:
+    paths:
+      - 'plugins/jev-layer/**'
+      - '.github/workflows/jev-plugin.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DSH_TELEMETRY_DISABLED: '1'
+
+jobs:
+  install:
+    name: install / ${{ matrix.runner }}
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [ubuntu-24.04, macos-15-intel]
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4
+        with:
+          dest: ${{ runner.temp }}/setup-pnpm-${{ github.run_id }}-${{ github.run_attempt }}
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: pnpm
+      - name: Assert x64 platform
+        run: node -e "if (process.arch !== 'x64') throw new Error('Expected Intel/x64 runner'); console.log(process.platform, process.arch)"
+      - run: pnpm install --frozen-lockfile
+      - name: Install addon development dependency without peers or scripts
+        run: npm install --ignore-scripts --legacy-peer-deps --package-lock=false --prefix plugins/jev-layer
+      - name: Check the published archive checksum
+        working-directory: plugins/jev-layer/releases
+        run: shasum -a 256 -c SHA256SUMS
+      - name: Build host libraries and addon
+        run: |
+          pnpm run build:lib:host
+          node plugins/jev-layer/build.mjs
+      - name: Run source and built Loader tests
+        run: |
+          pnpm exec vitest run --config plugins/jev-layer/vitest.config.ts
+          DSH_JEV_BUNDLE_SMOKE=1 pnpm exec vitest run --config plugins/jev-layer/vitest.config.ts plugins/jev-layer/tests/loader.spec.ts
+      - name: Install, activate, disable and remove the local archive
+        run: pnpm exec vitest run --config plugins/jev-layer/vitest.install.config.ts
+      - name: Install from the immutable GitHub archive URL
+        if: github.event_name == 'push'
+        env:
+          DSH_JEV_INSTALL_SPEC: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/plugins/jev-layer/releases/puregamma-dsh-jev-layer-0.1.0.tgz
+        run: pnpm exec vitest run --config plugins/jev-layer/vitest.install.config.ts
