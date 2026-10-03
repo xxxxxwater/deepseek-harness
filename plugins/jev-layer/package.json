@@ -1,0 +1,79 @@
+{
+  "name": "@puregamma/dsh-jev-layer",
+  "version": "0.1.0",
+  "description": "JEV decisions, bounded delegation and on-demand review for DeepSeek Harness",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./locale/*.json": "./locale/*.json"
+  },
+  "files": [
+    "lib/index.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "README.md",
+    "README.zh.md",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.txt"
+  ],
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xxxxxwater/deepseek-harness.git",
+    "directory": "plugins/jev-layer"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "4.0.4 || 4.0.5-alpha.1",
+    "@deepseek-ai/schemastery": "3.18.4 || 3.18.5-alpha.1",
+    "@deepseek-ai/dsh-agent": "0.2.0-rc.2 || 0.2.1-alpha.1",
+    "@deepseek-ai/dsh-credentials": "0.2.0-rc.2 || 0.2.1-alpha.1",
+    "@deepseek-ai/dsh-llm": "0.2.0-rc.2 || 0.2.1-alpha.1",
+    "@deepseek-ai/dsh-tools": "0.2.0-rc.2 || 0.2.1-alpha.1",
+    "@deepseek-ai/dsh-system-prompt": "0.2.0-rc.2 || 0.2.1-alpha.1",
+    "@deepseek-ai/dsh-subagent": "0.2.0-rc.2 || 0.2.1-alpha.1",
+    "@deepseek-ai/dsh-scope": "0.2.0-rc.2 || 0.2.1-alpha.1"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/cordis": {
+      "optional": true
+    },
+    "@deepseek-ai/schemastery": {
+      "optional": true
+    },
+    "@deepseek-ai/dsh-agent": {
+      "optional": true
+    },
+    "@deepseek-ai/dsh-credentials": {
+      "optional": true
+    },
+    "@deepseek-ai/dsh-llm": {
+      "optional": true
+    },
+    "@deepseek-ai/dsh-tools": {
+      "optional": true
+    },
+    "@deepseek-ai/dsh-system-prompt": {
+      "optional": true
+    },
+    "@deepseek-ai/dsh-subagent": {
+      "optional": true
+    },
+    "@deepseek-ai/dsh-scope": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "zod": "4.4.3"
+  }
+}

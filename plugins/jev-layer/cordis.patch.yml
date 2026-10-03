@@ -1,0 +1,19 @@
+- insert:
+    - id: puregamma-jev-layer
+      name: '@puregamma/dsh-jev-layer'
+      config:
+        apiKeyEnv: TYPESAFE_API_KEY
+        baseUrl: https://api.typesafe.ai
+        decisionModel: jev-latest
+        subagentProvider: spawn
+        sharpThreshold: 0.85
+        minMargin: 0.20
+        maxEntropy: 0.55
+        decisionTimeoutMs: 1500
+        childTimeoutMs: 120000
+        maxConcurrentChildren: 3
+        maxContextChars: 16000
+        maxResponseBytes: 131072
+        failureThreshold: 2
+        reviewBeforeDone: false
+        readTools: [read, glob, grep, web_search, web_fetch]

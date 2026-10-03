@@ -1,0 +1,48 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`real Loader composition > runs a full parent turn and logs the unavailable decision without inventing JEV success > recorded model-visible decision transcript 1`] = `
+[
+  {
+    "content": [
+      {
+        "text": "Inspect this project",
+        "type": "text",
+      },
+    ],
+    "role": "user",
+    "source": "user",
+  },
+  {
+    "content": [
+      {
+        "arguments": "{"state":"task","question":"which file?","candidates":[{"id":"auth","description":"auth source"},{"id":"billing","description":"billing source"}]}",
+        "id": "decision",
+        "name": "jev_decide",
+        "type": "tool-call",
+      },
+    ],
+    "role": "assistant",
+    "source": "model",
+  },
+  {
+    "content": [
+      {
+        "text": "{"route":"unavailable","selected":null,"confidence":null,"margin":null,"entropy":null,"probabilities":{},"source":"none","reason":"JEV is not connected; configure TYPESAFE_API_KEY in DSH credentials"}",
+        "type": "text",
+      },
+    ],
+    "role": "tool",
+    "source": "tool",
+  },
+  {
+    "content": [
+      {
+        "text": "JEV is not connected; I will inspect auth first.",
+        "type": "text",
+      },
+    ],
+    "role": "assistant",
+    "source": "model",
+  },
+]
+`;

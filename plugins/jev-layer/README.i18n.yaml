@@ -1,0 +1,28 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write plugins/jev-layer/README.md
+/jev-decision-layer-for-deepseek-harness:
+  en: 0d3a3d7fd8740750
+  zh: 0c97ec1213807ca2
+/jev-decision-layer-for-deepseek-harness/install-in-the-desktop-application:
+  en: ba176dc77eeaa052
+  zh: 20b749424d4d549e
+/jev-decision-layer-for-deepseek-harness/connect-jev:
+  en: 471d67a4439d67a1
+  zh: 302f9cee1a6a0cbd
+/jev-decision-layer-for-deepseek-harness/use-the-agent:
+  en: 9b14f184493ad46a
+  zh: 0130136597721e7a
+/jev-decision-layer-for-deepseek-harness/configure-and-disable:
+  en: 4d36ea4d68a56337
+  zh: 3a900fbff7af08a0
+/jev-decision-layer-for-deepseek-harness/build-and-test-from-this-fork:
+  en: 273f5bb865245b0c
+  zh: 6425eb44b278411c
+/jev-decision-layer-for-deepseek-harness/model-and-cache-effects:
+  en: f0eb886e3a8c3a04
+  zh: 18fb27c98c047ca5
+/jev-decision-layer-for-deepseek-harness/limits:
+  en: 2b674e11d9b50f17
+  zh: dae4d427f7c3fa9a
