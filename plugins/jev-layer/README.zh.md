@@ -59,9 +59,13 @@ Use the JEV decision layer for this task. First ask an explorer to map the relev
 pnpm exec tsc -b plugins/jev-layer/tsconfig.json
 pnpm exec vitest run --config plugins/jev-layer/vitest.config.ts
 node plugins/jev-layer/build.mjs
+pnpm run build:lib:host
+pnpm exec vitest run --config plugins/jev-layer/vitest.install.config.ts
 ```
 
 构建输出 ESM，打包插件配置补丁和本地化元数据，并将压缩包校验和写入 `releases/`。测试组合加载生产 Loader、Agent 循环、工具注册表和进程内子 Agent 供应商。只有模型和 HTTP 响应使用预设结果。包不扩展 Agent 循环，也不引入新的持久化 Session 事件类型；决策工具结果和注明来源的审查上下文使用宿主已有日志。
+
+源码测试包含 21 个无密钥用例。独立的安装测试包含两个用例，需要已构建的宿主库：它使用真实 pnpm 和配置启用流程，通过宿主对等依赖解析器启动已安装的压缩包，并检查禁用、移除和版本不兼容拒绝。默认离线安装本地压缩包；将 `DSH_JEV_INSTALL_SPEC` 设置为包地址可验证包安装服务的下载流程。这些检查在 Linux 上运行，不验证 Intel Mac 桌面执行或真实 JEV/DeepSeek 凭据。
 
 ## 模型与缓存影响
 

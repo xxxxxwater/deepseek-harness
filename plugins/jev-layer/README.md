@@ -59,9 +59,13 @@ This addon is isolated under `plugins/`; the upstream product composition remain
 pnpm exec tsc -b plugins/jev-layer/tsconfig.json
 pnpm exec vitest run --config plugins/jev-layer/vitest.config.ts
 node plugins/jev-layer/build.mjs
+pnpm run build:lib:host
+pnpm exec vitest run --config plugins/jev-layer/vitest.install.config.ts
 ```
 
 The build emits ESM, packages the bundle patch and localized metadata, and writes the archive checksum under `releases/`. The test composition loads the production Loader, agent loop, tool registry and in-process child provider. Only model and HTTP responses are scripted. The package does not extend the agent loop or introduce a new persisted Session event type; decision tool results and attributed review context use the host’s existing log.
+
+The source suite contains 21 keyless cases. The separate installation suite contains two cases and requires built host libraries: it uses real pnpm and profile activation, boots the installed archive through the host peer resolver, and checks disablement, removal and incompatible-version refusal. By default it installs the local archive offline; set `DSH_JEV_INSTALL_SPEC` to the package URL to exercise downloading through the package service. These checks run on Linux and do not verify Intel Mac desktop execution or live JEV/DeepSeek credentials.
 
 ## Model and cache effects
 
