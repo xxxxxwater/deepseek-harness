@@ -82,9 +82,9 @@ describe('installer preparation preserves application dependencies', () => {
     const config = createElectronBuilderConfig({
       DSH_DESKTOP_APP_ID: 'com.deepseek.harness', DSH_DESKTOP_UNSIGNED: '1',
     }, 'win32', 'x64')
-    expect(config.extraMetadata.dshMandatoryUpdatePolicy).toBeUndefined()
+    expect(config.extraMetadata).not.toHaveProperty('dshMandatoryUpdatePolicy')
     expect(config.publish).toBeNull()
-    expect(config.productName).toBe('PureGamma Harness')
+    expect(config).toHaveProperty('productName', 'PureGamma Harness')
   })
 
   it('packages every preload entry point the shell loads', async () => {
