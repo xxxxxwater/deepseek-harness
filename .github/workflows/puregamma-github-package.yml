@@ -1,0 +1,69 @@
+name: Publish PureGamma source and plugins to GitHub Packages
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: puregamma-first-github-package
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/setup-node@v7.0.0
+        with:
+          node-version: '24'
+          registry-url: https://npm.pkg.github.com
+          scope: '@xxxxxwater'
+          package-manager-cache: false
+      - name: Download the published source and verify all four distributions exist
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh api "repos/$GH_REPO/releases/tags/puregamma-harness-v0.1.0" > release.json
+          node - <<'JS'
+          const fs = require('node:fs');
+          const r = JSON.parse(fs.readFileSync('release.json'));
+          const names = ['windows-x64.exe', 'macos-x64.zip', 'macos-arm64.zip', 'source.zip'].map(s => 'puregamma-harness-v0.1.0-' + s);
+          if (r.draft || !names.every(n => r.assets.some(a => a.name === n && a.state === 'uploaded' && a.size > 0))) throw Error('Publish all four verified release assets first');
+          JS
+          mkdir package
+          gh release download puregamma-harness-v0.1.0 --pattern puregamma-harness-v0.1.0-source.zip --dir package
+          python3 - <<'PY'
+          import zipfile,json,pathlib,hashlib
+          root=pathlib.Path('package')
+          source=root/'puregamma-harness-v0.1.0-source.zip'
+          with zipfile.ZipFile(source) as z:
+              prefix='PureGamma-Harness-0.1.0-source/'
+              inventory=json.loads(z.read(prefix+'pg-harness/bundled-plugins/inventory.json'))
+              for p in inventory['plugins']:
+                  assert hashlib.sha256(z.read(prefix+'pg-harness/bundled-plugins/'+p['archive'])).hexdigest()==p['sha256']
+              (root/'LICENSE').write_bytes(z.read(prefix+'LICENSE'))
+              assert not any(n.startswith(prefix+'.dsh/') or n.endswith(('/.env','.env.windows','.env.macos')) for n in z.namelist())
+          (root/'SHA256SUMS').write_text(hashlib.sha256(source.read_bytes()).hexdigest()+'  '+source.name+'\n')
+          manifest={'name':'@xxxxxwater/puregamma-harness','version':'0.1.0','description':'PureGamma Harness release source with all bundled plugin code; native apps are on GitHub Releases','license':'MIT','repository':{'type':'git','url':'https://github.com/xxxxxwater/deepseek-harness.git'},'homepage':'https://github.com/xxxxxwater/deepseek-harness/releases/tag/puregamma-harness-v0.1.0','files':['puregamma-harness-v0.1.0-source.zip','SHA256SUMS','LICENSE','README.md'],'publishConfig':{'registry':'https://npm.pkg.github.com','access':'public'}}
+          (root/'package.json').write_text(json.dumps(manifest,indent=2)+'\n')
+          (root/'README.md').write_text('# PureGamma Harness\n\nSource and bundled plugin distribution for v0.1.0, based on DeepSeek Harness 0.2.1-alpha.2.\n\nThe included ZIP contains the complete release source, 13 third-party plugin archives, four PureGamma UI packages, and the upstream official bundles. It excludes personal conversations, context records, profiles, and API credentials. Extract the ZIP to develop or build the project. SHA256SUMS verifies the archive.\n\nWindows EXE, Intel Mac and Apple Silicon Mac downloads and setup instructions: [GitHub Releases](https://github.com/xxxxxwater/deepseek-harness/releases/tag/puregamma-harness-v0.1.0). This npm package supplies source and plugin code; use the release installers for the desktop app.\n\n源码包包含全部发布源码与内置插件，不含个人会话、上下文、配置或 API 密钥。桌面安装请使用 Releases 中对应平台的文件。\n')
+          PY
+      - name: Pack the explicit source-only payload
+        run: |
+          cd package
+          npm pack --ignore-scripts --json > ../pack.json
+          node - <<'JS'
+          const fs = require('node:fs');
+          const p = JSON.parse(fs.readFileSync('../pack.json'))[0];
+          if (p.size >= 256000000) throw Error('GitHub npm package size limit exceeded');
+          const allowed = new Set(['package.json','README.md','LICENSE','SHA256SUMS','puregamma-harness-v0.1.0-source.zip']);
+          if (p.files.length !== allowed.size || !p.files.every(f => allowed.has(f.path))) throw Error('Unexpected publication payload');
+          JS
+      - name: Publish the first package to the linked repository
+        env:
+          NODE_AUTH_TOKEN: ${{ github.token }}
+        run: npm publish package/xxxxxwater-puregamma-harness-0.1.0.tgz --ignore-scripts --access public --registry https://npm.pkg.github.com
