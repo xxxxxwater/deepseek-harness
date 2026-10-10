@@ -69,6 +69,9 @@ jobs:
       - name: Upload verified Windows installer
         run: |
           gh release upload puregamma-harness-v0.1.0 --clobber release-assets/windows/*.exe
+      - name: Upload the verified source archive
+        run: |
+          gh release upload puregamma-harness-v0.1.0 --clobber release-assets/puregamma-harness-v0.1.0-source.zip
       - name: Upload verified Apple Silicon installer
         if: steps.verify.outputs.include_arm == 'true'
         run: |
