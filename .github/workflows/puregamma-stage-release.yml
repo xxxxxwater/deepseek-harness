@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       build_run:
-        description: Successful PureGamma native-build run ID
+        description: Completed PureGamma native-build run ID
         type: string
         required: true
 
@@ -25,19 +25,24 @@ jobs:
       GH_REPO: ${{ github.repository }}
       BUILD_RUN: ${{ inputs.build_run }}
     steps:
-      - name: Bind artifacts to the existing draft and successful build
+      - name: Bind passing platform artifacts to the existing release
         id: verify
         run: |
           [[ "$BUILD_RUN" =~ ^[0-9]+$ ]]
           gh api "repos/$GH_REPO/actions/runs/$BUILD_RUN" > build-run.json
+          gh api "repos/$GH_REPO/actions/runs/$BUILD_RUN/jobs?per_page=100" > build-jobs.json
           gh api "repos/$GH_REPO/releases/tags/puregamma-harness-v0.1.0" > release.json
           node - <<'JS'
           const fs = require('node:fs');
           const run = JSON.parse(fs.readFileSync('build-run.json'));
           const release = JSON.parse(fs.readFileSync('release.json'));
-          if (run.conclusion !== 'success' || run.path !== '.github/workflows/puregamma-desktop-release.yml') throw Error('Native builds must pass');
-          if (!release.draft || release.target_commitish !== run.head_sha) throw Error('Draft must target the verified build commit');
+          const jobs = JSON.parse(fs.readFileSync('build-jobs.json')).jobs;
+          if (run.status !== 'completed' || run.path !== '.github/workflows/puregamma-desktop-release.yml') throw Error('Expected a completed native-build workflow');
+          if (!jobs.some(j => j.name === 'Windows x64 EXE' && j.conclusion === 'success')) throw Error('Windows build and runtime checks must pass');
+          if (release.target_commitish !== run.head_sha) throw Error('Release must target the verified build commit');
+          const arm = jobs.some(j => j.name === 'Apple Silicon macOS' && j.conclusion === 'success');
           fs.appendFileSync(process.env.GITHUB_OUTPUT, 'source_sha=' + run.head_sha + '\n');
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, 'include_arm=' + arm + '\n');
           JS
       - uses: actions/checkout@v7.0.1
         with:
@@ -46,6 +51,9 @@ jobs:
       - name: Retrieve verified native artifacts
         run: |
           gh run download "$BUILD_RUN" --name puregamma-windows-x64 --dir release-assets/windows
+      - name: Retrieve Apple Silicon only after its own build and runtime checks pass
+        if: steps.verify.outputs.include_arm == 'true'
+        run: |
           gh run download "$BUILD_RUN" --name puregamma-macos-arm64 --dir release-assets/mac
       - name: Archive the exact release source and all bundled plugin code
         run: |
@@ -58,6 +66,10 @@ jobs:
             if (crypto.createHash('sha256').update(fs.readFileSync('pg-harness/bundled-plugins/' + p.archive)).digest('hex') !== p.sha256) throw Error('Plugin archive integrity failed');
           }
           JS
-      - name: Upload to draft without publishing
+      - name: Upload verified Windows installer
         run: |
-          gh release upload puregamma-harness-v0.1.0 --clobber release-assets/windows/*.exe release-assets/mac/*.zip release-assets/puregamma-harness-v0.1.0-source.zip
+          gh release upload puregamma-harness-v0.1.0 --clobber release-assets/windows/*.exe
+      - name: Upload verified Apple Silicon installer
+        if: steps.verify.outputs.include_arm == 'true'
+        run: |
+          gh release upload puregamma-harness-v0.1.0 --clobber release-assets/mac/*.zip
