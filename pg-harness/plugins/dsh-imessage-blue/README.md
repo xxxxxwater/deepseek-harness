@@ -1,3 +1,5 @@
-# iMessage 深蓝聊天配色
+# iMessage deep-blue chat colors
 
-深蓝色发送按钮与用户消息气泡，白色文字，深色模式下输入框为深蓝灰色。可在插件页关闭，恢复内置样式。
+English | [中文](README.zh.md)
+
+Deep-blue send controls and user-message bubbles with white text, plus a dark blue-gray composer in dark mode. Disable this optional plugin to restore the built-in styles.

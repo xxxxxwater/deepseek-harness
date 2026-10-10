@@ -1,3 +1,5 @@
-# VS Code 风格代码显示
+# VS Code style code display
 
-使用 Menlo 13px 等宽字体，以及近似 VS Code Dark+ / Light+ 的语法颜色。仅调整代码显示；在 DSH 插件页关闭即可恢复内置配色。
+English | [中文](README.zh.md)
+
+Uses Menlo at 13px with syntax colors inspired by VS Code Dark+ / Light+. This plugin changes code display only; disable it in the plugin page to restore the built-in colors. The optional pixel-font plugin overrides the family while retaining these sizes and colors.

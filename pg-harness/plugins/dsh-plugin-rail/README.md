@@ -1,5 +1,7 @@
-# 插件能力图标栏
+# Plugin capability rail
 
-保留 DSH 品牌与真实版本，展开或收起原有侧边栏时均显示左侧 SVG 图标栏。插件入口来自本地安装清单，有独立页面的打开原页面，其余打开插件详情与配置。可在插件页关闭以恢复原有布局。
+English | [中文](README.zh.md)
 
-悬停或键盘聚焦图标显示功能名、真实包名与版本。底部省略号打开插件预览列表，可置顶/取消置顶；右键图标也可打开此列表。置顶图标排在前方，以蓝点标记，保存在当前桌面客户端本地设置中。
+The left SVG rail remains visible with the original sidebar expanded or collapsed, below the macOS window controls. Entries come from installed plugins: dedicated pages open directly, and other entries open plugin details and configuration. Disable this optional plugin to restore the original layout.
+
+Hovering or focusing an icon shows its capability name, actual package name, and version. The bottom more button opens a preview list with pin/unpin controls; right-clicking an icon opens the same list. Pinned icons move to the front with a blue dot and are stored in this desktop client.

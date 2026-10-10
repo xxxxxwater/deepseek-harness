@@ -1,5 +1,7 @@
 # PureGamma Harness
 
+[English](README.md) | 中文
+
 PureGamma Harness 是基于上游 `dsh-v0.2.1-alpha.2` 源码的 PureGamma Research 桌面定制版。首个定制版本为 `puregamma-harness-v0.1.0`；兼容的内置引擎与应用版本保留为 `0.2.1-alpha.2`。
 
 PureGamma Research 的飞鸟启发了新版应用标志。PureGamma Harness 替换应用、欢迎页、侧栏、会话首屏和浏览器图标。插件图标栏从 macOS 窗口按钮下方开始，侧栏收起时仍显示，并提供插件名称和版本预览、省略号菜单和本机置顶。会话轮次导航预览真实提问与回复，点击后定位到对应轮次。可选 UI 插件提供 IDE 代码配色、深蓝气泡和保持字号与颜色的中英文像素字体。

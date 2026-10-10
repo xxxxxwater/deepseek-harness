@@ -1,8 +1,10 @@
 # PureGamma Harness
 
+English | [中文](README.zh.md)
+
 PureGamma Harness is a PG Research desktop edition of DeepSeek Harness, based on the upstream `dsh-v0.2.1-alpha.2` source. The first PureGamma edition is `puregamma-harness-v0.1.0`; the compatible bundled engine and application version remain `0.2.1-alpha.2`.
 
-The PureGamma Research swallow inspired the new application artwork. PureGamma Harness replaces the desktop, welcome, sidebar, conversation hero, and browser icons. The plugin rail starts below the macOS window controls, stays visible when the sidebar is collapsed, and provides plugin name/version previews, a more menu, and device-local pins. The conversation turn rail previews real questions and replies and jumps to the selected turn. Optional UI packages provide IDE code colors deep-blue message bubbles, and Chinese/English pixel typography without changing sizes or colors.
+The PureGamma Research swallow inspired the new application artwork. PureGamma Harness replaces the desktop, welcome, sidebar, conversation hero, and browser icons. The plugin rail starts below the macOS window controls, stays visible when the sidebar is collapsed, and provides plugin name/version previews, a more menu, and device-local pins. The conversation turn rail previews real questions and replies and jumps to the selected turn. Optional UI packages provide IDE code colors, deep-blue message bubbles, and Chinese/English pixel typography without changing sizes or colors.
 
 ## Install on Intel macOS
 
