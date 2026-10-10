@@ -1,17 +1,17 @@
-/** Install the optional PG UI bundles without replacing any user configuration. */
+/** Install the optional PureGamma UI bundles without replacing any user configuration. */
 import { cpSync, existsSync, lstatSync, mkdirSync, readFileSync, readlinkSync, renameSync, symlinkSync, writeFileSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 /**
- * Install PG UI packages into the reserved desktop profile with reversible backups.
+ * Install PureGamma UI packages into the reserved desktop profile with reversible backups.
  * @param home - Harness data directory, normally the existing .dsh directory.
  * @returns the backup directory created for this installation.
  */
 export function install(home = process.env.DSH_HOME || join(homedir(), '.dsh')) {
   const profile = join(home, 'profiles', 'desktop')
-  if (existsSync(join(profile, 'lock'))) throw new Error('Quit Harness before installing the PG UI bundles.')
+  if (existsSync(join(profile, 'lock'))) throw new Error('Quit Harness before installing the PureGamma UI bundles.')
   const source = join(dirname(fileURLToPath(import.meta.url)), 'plugins')
   const backup = join(home, 'pg-harness-backups', new Date().toISOString().replaceAll(':', '-') + '-' + process.pid)
   mkdirSync(backup, { recursive: true, mode: 0o700 })
