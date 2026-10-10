@@ -6,6 +6,7 @@ import { homedir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { installUniverPreviewBridge } from './plugin-patches/univer-office/patch.mjs'
+import { installBundledPluginCompatibility } from './plugin-patches/bundled-compat.mjs'
 
 /**
  * Install PureGamma UI packages into the reserved desktop profile with reversible backups.
@@ -69,6 +70,7 @@ export function install(home = process.env.DSH_HOME || join(homedir(), '.dsh')) 
   writeFileSync(pending, JSON.stringify(manifest, null, 2) + '\n', { mode: 0o600 })
   renameSync(pending, manifestPath)
   installUniverPreviewBridge(profile, backup)
+  installBundledPluginCompatibility(profile, backup)
   return backup
 }
 
@@ -89,5 +91,6 @@ if (process.argv[1] && realpathSync(process.argv[1]) === fileURLToPath(import.me
     })
   }
   installUniverPreviewBridge(profile, backup)
+  installBundledPluginCompatibility(profile, backup)
   console.log('PureGamma Harness plugins installed. Backup: ' + backup)
 }
