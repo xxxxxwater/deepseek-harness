@@ -1,0 +1,143 @@
+{
+  "formatVersion": 1,
+  "bundles": [
+    "@deepseek-ai/dsh-base",
+    "@deepseek-ai/dsh-web-app",
+    "dsh-univer-office",
+    "dsh-at-file",
+    "dsh-better-sidebar",
+    "@deepseek-ai/dsh-experimental-agent-team-profile",
+    "@deepseek-ai/dsh-experimental-auto-review",
+    "@deepseek-ai/dsh-experimental-inspector-profile",
+    "@deepseek-ai/dsh-experimental-voice-input-bundle",
+    "@dhicoc/dsh-reverse-skill",
+    "@linxin666/dsh-client-ui-skill-explorer",
+    "@vectorize-io/hindsight-coding-agents",
+    "billion-context",
+    "dsh-context",
+    "dsh-ego-browser",
+    "dsh-sentinelx",
+    "dshmarket",
+    "open-sea-skin",
+    "dsh-magicpath",
+    "dsh-vscode-code-theme",
+    "dsh-imessage-blue",
+    "@deepseek-ai/dsh-experimental-tool-worktree",
+    "@deepseek-ai/dsh-experimental-cot-translation-bundle",
+    "@deepseek-ai/dsh-experimental-terminal-bundle",
+    "@deepseek-ai/dsh-experimental-session-search",
+    "@deepseek-ai/dsh-experimental-session-titles-bundle",
+    "@deepseek-ai/dsh-experimental-badge-skill-bundle",
+    "@deepseek-ai/dsh-experimental-ralph-bundle",
+    "@deepseek-ai/dsh-subagent-codex",
+    "@deepseek-ai/dsh-subagent-claude-code",
+    "dsh-plugin-rail",
+    "dsh-pixel-font"
+  ],
+  "plugins": [
+    {
+      "name": "@dhicoc/dsh-reverse-skill",
+      "version": "1.2.0",
+      "license": "MIT",
+      "archive": "dhicoc-dsh-reverse-skill-1.2.0.tgz",
+      "sha256": "c2ba44dec59db7a40f9a60ba98b9df7775cd1434605638320f30a8828ee99646",
+      "unpackedSize": 6128388
+    },
+    {
+      "name": "@linxin666/dsh-client-ui-skill-explorer",
+      "version": "0.4.5",
+      "license": "BSD-3-Clause",
+      "archive": "linxin666-dsh-client-ui-skill-explorer-0.4.5.tgz",
+      "sha256": "83d4ccab24cc977a002f0b8a9b137baaf4caa3a60fbcb231c03667f2e9c0519a",
+      "unpackedSize": 264663
+    },
+    {
+      "name": "@vectorize-io/hindsight-coding-agents",
+      "version": "0.8.0",
+      "license": "See included upstream notices",
+      "archive": "vectorize-io-hindsight-coding-agents-0.8.0.tgz",
+      "sha256": "afc489206154f2e7254057e52b455be8751e8b8bbf5e4a720a104c136fbeed7c",
+      "unpackedSize": 14961271
+    },
+    {
+      "name": "billion-context",
+      "version": "0.1.190",
+      "license": "MIT",
+      "archive": "billion-context-0.1.190.tgz",
+      "sha256": "b193f1c6a08905ff5b4039db343d52fadd587c517a6f8b93a17ad6af4b99d0fd",
+      "unpackedSize": 128063152
+    },
+    {
+      "name": "dsh-at-file",
+      "version": "0.7.0",
+      "license": "MIT",
+      "archive": "dsh-at-file-0.7.0.tgz",
+      "sha256": "875d136550fc3bbb77a06e0013bc5f9575c6b566bc8bacc343a8a138727020d3",
+      "unpackedSize": 3475194
+    },
+    {
+      "name": "dsh-better-sidebar",
+      "version": "0.25.0",
+      "license": "MIT",
+      "archive": "dsh-better-sidebar-0.25.0.tgz",
+      "sha256": "89aea7eb8793b2a402f02a423e271eb3be4bd0bac723d072433dd49cfe9d9fb9",
+      "unpackedSize": 17742806
+    },
+    {
+      "name": "dsh-context",
+      "version": "0.66.1",
+      "license": "Apache-2.0",
+      "archive": "dsh-context-0.66.1.tgz",
+      "sha256": "edb8cbd616b107a19ccc869f8bf5538ed7783eb349915ff6e2e28d5146b6bbe2",
+      "unpackedSize": 528990
+    },
+    {
+      "name": "dsh-ego-browser",
+      "version": "0.8.6",
+      "license": "MIT",
+      "archive": "dsh-ego-browser-0.8.6.tgz",
+      "sha256": "48745f44cdc73013f733ffb986160e62de96d633735a33ca47334a3f5575c052",
+      "unpackedSize": 1248367
+    },
+    {
+      "name": "dsh-magicpath",
+      "version": "0.1.0",
+      "license": "MIT",
+      "archive": "dsh-magicpath-0.1.0.tgz",
+      "sha256": "d2fe3cb067bdaeb5828ee144b479c8aef9c98b3a6a5fc2543ec8a2ecf9de3fc1",
+      "unpackedSize": 36049
+    },
+    {
+      "name": "dsh-sentinelx",
+      "version": "0.1.1",
+      "license": "MIT",
+      "archive": "dsh-sentinelx-0.1.1.tgz",
+      "sha256": "62a43adf915fb0e1d1780f2bd8c4da03553418799a482ab2a59ebcc048813cc6",
+      "unpackedSize": 69341
+    },
+    {
+      "name": "dsh-univer-office",
+      "version": "0.3.7",
+      "license": "Apache-2.0",
+      "archive": "dsh-univer-office-0.3.7.tgz",
+      "sha256": "7c1a321d7467a2b5f0a7d57f926a59888e6723b3466259f65b5ca7dd6d9f76f5",
+      "unpackedSize": 226850899
+    },
+    {
+      "name": "dshmarket",
+      "version": "1.66.14",
+      "license": "MIT",
+      "archive": "dshmarket-1.66.14.tgz",
+      "sha256": "598b1e94be1278f93cd0b344612b701b4de7e04e8c4ffce05fec25ea62828279",
+      "unpackedSize": 4401521
+    },
+    {
+      "name": "open-sea-skin",
+      "version": "1.2.3",
+      "license": "MIT",
+      "archive": "open-sea-skin-1.2.3.tgz",
+      "sha256": "8aa2f1ffd62e040d0a798a6a0aa536089d1190a1f778a38312fb35f7e8f9693a",
+      "unpackedSize": 1188404
+    }
+  ]
+}

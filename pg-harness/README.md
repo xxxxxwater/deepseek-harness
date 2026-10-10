@@ -8,10 +8,14 @@ The PureGamma Research swallow inspired the new application artwork. PureGamma H
 
 ## Install on Intel macOS
 
-Download the release ZIP, extract it, move `PureGamma Harness.app` to your preferred location, quit any running Harness instance, and run the included `Install PureGamma Harness.command` beside the app. The command uses the app's bundled runtime, installs the optional UI bundles, and launches the app. No system Node installation is required. This build is ad-hoc signed and has not been Apple notarized.
+Download the release ZIP, extract it, move `PureGamma Harness.app` to your preferred location, quit any running Harness instance, and run the included `Install PureGamma Harness.command` beside the app. The command uses the app's bundled runtime, installs the bundled plugins, and launches the app. No system Node installation is required. A fresh installation downloads any missing plugin libraries; existing installed plugin versions take precedence. This build is ad-hoc signed and has not been Apple notarized.
 
 The existing `.dsh` sessions, settings, credentials, and third-party plugins remain local. The application id and Electron data directory stay compatible with the upstream desktop installation. The UI installer preserves other profile dependencies and configuration and writes a backup under `.dsh/pg-harness-backups`. No personal profile or credentials are included in the source or release.
 
 ## Build and verify
 
 Use the repository's supported `pnpm run package:desktop:mac:x64:unsigned --dir` build. The app carries this directory in `Contents/Resources/pg-harness`. Run `node --test pg-harness/install.test.mjs` for the profile-preservation checks, and the owning client and desktop tests for brand and turn-preview changes. The upstream MIT license and third-party notices apply; package names and provider identifiers retain their original values.
+
+## Bundled plugins
+
+The release includes 13 third-party plugin code archives, 4 PureGamma UI packages, and the official bundles named in [the inventory](bundled-plugins/inventory.json). Archives preserve the installed package versions and their upstream notices. The installer verifies SHA-256 values, retains existing plugin dependency sources, and adds missing packages. Plugin authentication must be configured locally; no sessions, context records, API credentials, or personal profile files are shipped.

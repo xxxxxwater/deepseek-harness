@@ -17,7 +17,10 @@ test('installation preserves third-party bundles and user settings and remains r
     install(home)
     const result = JSON.parse(readFileSync(join(profile, 'package.json'), 'utf8'))
     assert.equal(result.dependencies.retained, '1.2.3')
-    assert.deepEqual(result.dsh.profile.bundles, ['retained', 'dsh-plugin-rail', 'dsh-vscode-code-theme', 'dsh-imessage-blue', 'dsh-pixel-font'])
+    assert.equal(result.dsh.profile.bundles[0], 'retained')
+    const inventory = JSON.parse(readFileSync(new URL('./bundled-plugins/inventory.json', import.meta.url), 'utf8'))
+    for (const bundle of inventory.bundles) assert.ok(result.dsh.profile.bundles.includes(bundle))
+    for (const plugin of inventory.plugins) assert.equal(result.dependencies[plugin.name], 'file:../../bundled-plugin-archives/' + plugin.archive)
     assert.equal(readFileSync(join(profile, 'cordis.patch.yml'), 'utf8'), 'retained settings\n')
     assert.equal(readFileSync(join(home, 'credentials.json'), 'utf8'), 'retained credentials\n')
   } finally { rmSync(home, { recursive: true, force: true }) }

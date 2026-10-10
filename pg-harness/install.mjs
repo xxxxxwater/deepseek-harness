@@ -1,5 +1,7 @@
 /** Install the optional PureGamma UI bundles without replacing any user configuration. */
 import { cpSync, existsSync, lstatSync, mkdirSync, readFileSync, readlinkSync, renameSync, symlinkSync, writeFileSync } from 'node:fs'
+import { execFileSync } from 'node:child_process'
+import { createHash } from 'node:crypto'
 import { homedir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -43,6 +45,25 @@ export function install(home = process.env.DSH_HOME || join(homedir(), '.dsh')) 
     manifest.dependencies[name] = 'link:../../local-plugins/' + name
     if (!manifest.dsh.profile.bundles.includes(name)) manifest.dsh.profile.bundles.push(name)
   }
+  const inventoryPath = join(dirname(fileURLToPath(import.meta.url)), 'bundled-plugins', 'inventory.json')
+  if (existsSync(inventoryPath)) {
+    const inventory = JSON.parse(readFileSync(inventoryPath, 'utf8'))
+    for (const plugin of inventory.plugins) {
+      // A user's installed version, dependency source and settings take precedence.
+      if (manifest.dependencies[plugin.name] !== undefined) continue
+      const archive = join(dirname(inventoryPath), plugin.archive)
+      if (createHash('sha256').update(readFileSync(archive)).digest('hex') !== plugin.sha256) {
+        throw new Error('Bundled plugin archive failed its integrity check: ' + plugin.name)
+      }
+      const destination = join(home, 'bundled-plugin-archives', plugin.archive)
+      mkdirSync(dirname(destination), { recursive: true })
+      cpSync(archive, destination)
+      manifest.dependencies[plugin.name] = 'file:../../bundled-plugin-archives/' + plugin.archive
+    }
+    for (const bundle of inventory.bundles) {
+      if (!manifest.dsh.profile.bundles.includes(bundle)) manifest.dsh.profile.bundles.push(bundle)
+    }
+  }
   const pending = manifestPath + '.pg-pending'
   writeFileSync(pending, JSON.stringify(manifest, null, 2) + '\n', { mode: 0o600 })
   renameSync(pending, manifestPath)
@@ -50,5 +71,20 @@ export function install(home = process.env.DSH_HOME || join(homedir(), '.dsh')) 
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  console.log('PureGamma Harness UI installed. Backup: ' + install())
+  const home = process.env.DSH_HOME || join(homedir(), '.dsh')
+  const backup = install(home)
+  const profile = join(home, 'profiles', 'desktop')
+  const manifest = JSON.parse(readFileSync(join(profile, 'package.json'), 'utf8'))
+  const missing = Object.keys(manifest.dependencies).some(name => !existsSync(join(profile, 'node_modules', name, 'package.json')))
+  if (missing) {
+    const resources = resolve(dirname(fileURLToPath(import.meta.url)), '..')
+    const pnpm = join(resources, 'runtime', 'primary-runtime', 'dependencies', 'pnpm', 'bin', 'pnpm.mjs')
+    if (!existsSync(pnpm)) throw new Error('Run the installer beside the packaged PureGamma Harness app.')
+    const workspace = join(profile, 'pnpm-workspace.yaml')
+    if (!existsSync(workspace)) writeFileSync(workspace, 'packages:\n  - .\nnodeLinker: hoisted\nautoInstallPeers: false\n')
+    execFileSync(process.execPath, [pnpm, '--dir', profile, 'install', '--no-frozen-lockfile', '--ignore-scripts'], {
+      stdio: 'inherit', env: { ...process.env, ELECTRON_RUN_AS_NODE: '1', NODE_OPTIONS: '' },
+    })
+  }
+  console.log('PureGamma Harness plugins installed. Backup: ' + backup)
 }
