@@ -23,6 +23,7 @@ jobs:
           scope: '@xxxxxwater'
           package-manager-cache: false
       - name: Download and verify the published source distribution
+        # Source publication is independent of platform installers deferred by the release owner.
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
