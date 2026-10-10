@@ -1,5 +1,5 @@
 /** Install the optional PureGamma UI bundles without replacing any user configuration. */
-import { cpSync, existsSync, lstatSync, mkdirSync, readFileSync, readlinkSync, renameSync, symlinkSync, writeFileSync } from 'node:fs'
+import { cpSync, existsSync, lstatSync, mkdirSync, readFileSync, readlinkSync, realpathSync, renameSync, symlinkSync, writeFileSync } from 'node:fs'
 import { execFileSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
 import { homedir } from 'node:os'
@@ -70,7 +70,7 @@ export function install(home = process.env.DSH_HOME || join(homedir(), '.dsh')) 
   return backup
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (process.argv[1] && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const home = process.env.DSH_HOME || join(homedir(), '.dsh')
   const backup = install(home)
   const profile = join(home, 'profiles', 'desktop')
