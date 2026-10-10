@@ -67,4 +67,4 @@ jobs:
       - name: Publish the first package to the linked repository
         env:
           NODE_AUTH_TOKEN: ${{ github.token }}
-        run: npm publish package/xxxxxwater-puregamma-harness-0.1.0.tgz --ignore-scripts --access public --registry https://npm.pkg.github.com
+        run: npm publish ./package/xxxxxwater-puregamma-harness-0.1.0.tgz --ignore-scripts --access public --registry https://npm.pkg.github.com
