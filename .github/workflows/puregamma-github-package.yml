@@ -22,7 +22,7 @@ jobs:
           registry-url: https://npm.pkg.github.com
           scope: '@xxxxxwater'
           package-manager-cache: false
-      - name: Download the published source and verify all four distributions exist
+      - name: Download and verify the published source distribution
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
@@ -31,8 +31,8 @@ jobs:
           node - <<'JS'
           const fs = require('node:fs');
           const r = JSON.parse(fs.readFileSync('release.json'));
-          const names = ['windows-x64.exe', 'macos-x64.zip', 'macos-arm64.zip', 'source.zip'].map(s => 'puregamma-harness-v0.1.0-' + s);
-          if (r.draft || !names.every(n => r.assets.some(a => a.name === n && a.state === 'uploaded' && a.size > 0))) throw Error('Publish all four verified release assets first');
+          const names = ['puregamma-harness-v0.1.0-source.zip'];
+          if (r.draft || !names.every(n => r.assets.some(a => a.name === n && a.state === 'uploaded' && a.size > 0))) throw Error('Publish the verified source release asset first');
           JS
           mkdir package
           gh release download puregamma-harness-v0.1.0 --pattern puregamma-harness-v0.1.0-source.zip --dir package
@@ -50,7 +50,7 @@ jobs:
           (root/'SHA256SUMS').write_text(hashlib.sha256(source.read_bytes()).hexdigest()+'  '+source.name+'\n')
           manifest={'name':'@xxxxxwater/puregamma-harness','version':'0.1.0','description':'PureGamma Harness release source with all bundled plugin code; native apps are on GitHub Releases','license':'MIT','repository':{'type':'git','url':'https://github.com/xxxxxwater/deepseek-harness.git'},'homepage':'https://github.com/xxxxxwater/deepseek-harness/releases/tag/puregamma-harness-v0.1.0','files':['puregamma-harness-v0.1.0-source.zip','SHA256SUMS','LICENSE','README.md'],'publishConfig':{'registry':'https://npm.pkg.github.com','access':'public'}}
           (root/'package.json').write_text(json.dumps(manifest,indent=2)+'\n')
-          (root/'README.md').write_text('# PureGamma Harness\n\nSource and bundled plugin distribution for v0.1.0, based on DeepSeek Harness 0.2.1-alpha.2.\n\nThe included ZIP contains the complete release source, 13 third-party plugin archives, four PureGamma UI packages, and the upstream official bundles. It excludes personal conversations, context records, profiles, and API credentials. Extract the ZIP to develop or build the project. SHA256SUMS verifies the archive.\n\nWindows EXE, Intel Mac and Apple Silicon Mac downloads and setup instructions: [GitHub Releases](https://github.com/xxxxxwater/deepseek-harness/releases/tag/puregamma-harness-v0.1.0). This npm package supplies source and plugin code; use the release installers for the desktop app.\n\n源码包包含全部发布源码与内置插件，不含个人会话、上下文、配置或 API 密钥。桌面安装请使用 Releases 中对应平台的文件。\n')
+          (root/'README.md').write_text('# PureGamma Harness\n\nSource and bundled plugin distribution for v0.1.0, based on DeepSeek Harness 0.2.1-alpha.2.\n\nThe included ZIP contains the complete release source, 13 third-party plugin archives, four PureGamma UI packages, and the upstream official bundles. It excludes personal conversations, context records, profiles, and API credentials. Extract the ZIP to develop or build the project. SHA256SUMS verifies the archive.\n\nDesktop downloads, platform availability and setup instructions: [GitHub Releases](https://github.com/xxxxxwater/deepseek-harness/releases/tag/puregamma-harness-v0.1.0). This npm package supplies source and plugin code; use the release installers for the desktop app.\n\n源码包包含全部发布源码与内置插件，不含个人会话、上下文、配置或 API 密钥。桌面安装请使用 Releases 中对应平台的文件。\n')
           PY
       - name: Pack the explicit source-only payload
         run: |
