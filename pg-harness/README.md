@@ -43,6 +43,8 @@ The [inventory](bundled-plugins/inventory.json) records 13 third-party plugin ar
 
 Codex and Claude Code subagent bundles are part of the upstream source and runtime; their providers require local configuration. Included code does not supply any account, subscription, or API credentials. The capability rail shows mounted plugins and keeps pinned choices on the device; some entries open the relevant settings or tool panel rather than a dedicated page.
 
+The installer adds a preview compatibility fix to the bundled `dsh-univer-office` 0.3.7 client. Native calls and nested code-tool calls now populate conversation review cards and live windows; open `.univer` files in the right sidebar for the file viewer. The fix subscribes to the current turn's Chat tool source, so nested call results appear without a full conversation refresh. It preserves plugin settings and dependency pins, backs up the original client, and refuses an unrecognized 0.3.7 build; other versions are left unchanged. The readable implementation is under `plugin-patches/univer-office`.
+
 <a id="build-and-verify"></a>
 
 ## Build and verify
@@ -55,6 +57,6 @@ Use Node.js 24, the pnpm version in `package.json`, and a native host that match
 | Apple Silicon Mac | `pnpm run package:desktop:mac:arm64:unsigned --dir` |
 | Windows x64 | `pnpm run package:desktop:win:x64:unsigned` |
 
-The manual [release build workflow](../.github/workflows/puregamma-desktop-release.yml) builds Windows and Apple Silicon on separate native runners. The source archive comes from the release commit. Run `node --test pg-harness/install.test.mjs` for profile-preservation checks. The owning client and desktop tests cover the brand, conversation previews, and packaging contracts.
+The manual [release build workflow](../.github/workflows/puregamma-desktop-release.yml) builds Windows and Apple Silicon on separate native runners. The source archive comes from the release commit. Run `node --test pg-harness/install.test.mjs pg-harness/plugin-patches/univer-office/preview.test.mjs` for profile preservation and office preview regressions. The preview fixture exercises the shipped client with real React and includes the unpatched client's missing-preview case. The owning client and desktop tests cover the brand and packaging contracts.
 
 The app carries this directory in its resources. The Windows helper and Mac command use the bundled runtime to run `install.mjs`; optional plugins are added to the reserved desktop profile. The upstream MIT license and third-party notices apply, and the pixel font licenses are included under `licenses`.

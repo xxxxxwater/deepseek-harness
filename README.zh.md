@@ -6,7 +6,7 @@
 
 PureGamma Harness 将编程、浏览器自动化、办公、技能和上下文工具整合进一个可定制的智能体工作区。桌面版基于 DeepSeek Harness `dsh-v0.2.1-alpha.2`，保留其插件架构。首个 PureGamma 版本为 `puregamma-harness-v0.1.0`；内置引擎仍显示真实版本 `0.2.1-alpha.2`。
 
-[下载桌面版](https://github.com/xxxxxwater/deepseek-harness/releases) · [安装与插件说明](pg-harness/README.zh.md) · [用户指南](docs/user/guide/index.zh.md)
+[下载桌面版](https://github.com/xxxxxwater/PureGamma-harness/releases) · [安装与插件说明](pg-harness/README.zh.md) · [用户指南](docs/user/guide/index.zh.md)
 
 <a id="harness-capabilities"></a>
 
@@ -74,7 +74,7 @@ PureGamma Harness 将编程、浏览器自动化、办公、技能和上下文�
 安装 Node.js 24 和仓库指定的 pnpm 版本，然后克隆本版本的 `master` 分支：
 
 ```sh
-git clone --branch master https://github.com/xxxxxwater/deepseek-harness.git
+git clone --branch master https://github.com/xxxxxwater/PureGamma-harness.git
 cd deepseek-harness
 pnpm install --frozen-lockfile
 pnpm run build

@@ -6,7 +6,7 @@ English | [中文](README.zh.md)
 
 PureGamma Harness brings coding, browser automation, office work, skills, and context tools into one customizable agent workspace. This desktop edition builds on DeepSeek Harness `dsh-v0.2.1-alpha.2` and preserves its plugin architecture. The first PureGamma release is `puregamma-harness-v0.1.0`; the bundled engine reports its real version, `0.2.1-alpha.2`.
 
-[Download the desktop release](https://github.com/xxxxxwater/deepseek-harness/releases) · [Installation and plugin guide](pg-harness/README.md) · [User guide](docs/user/guide/index.md)
+[Download the desktop release](https://github.com/xxxxxwater/PureGamma-harness/releases) · [Installation and plugin guide](pg-harness/README.md) · [User guide](docs/user/guide/index.md)
 
 <a id="harness-capabilities"></a>
 
@@ -74,7 +74,7 @@ Personal conversations, context records, API keys, and local profile files are e
 Install Node.js 24 and the repository's pnpm version, then clone this edition's `master` branch:
 
 ```sh
-git clone --branch master https://github.com/xxxxxwater/deepseek-harness.git
+git clone --branch master https://github.com/xxxxxwater/PureGamma-harness.git
 cd deepseek-harness
 pnpm install --frozen-lockfile
 pnpm run build

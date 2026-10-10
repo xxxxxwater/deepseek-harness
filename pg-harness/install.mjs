@@ -5,6 +5,7 @@ import { createHash } from 'node:crypto'
 import { homedir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { installUniverPreviewBridge } from './plugin-patches/univer-office/patch.mjs'
 
 /**
  * Install PureGamma UI packages into the reserved desktop profile with reversible backups.
@@ -67,6 +68,7 @@ export function install(home = process.env.DSH_HOME || join(homedir(), '.dsh')) 
   const pending = manifestPath + '.pg-pending'
   writeFileSync(pending, JSON.stringify(manifest, null, 2) + '\n', { mode: 0o600 })
   renameSync(pending, manifestPath)
+  installUniverPreviewBridge(profile, backup)
   return backup
 }
 
@@ -86,5 +88,6 @@ if (process.argv[1] && realpathSync(process.argv[1]) === fileURLToPath(import.me
       stdio: 'inherit', env: { ...process.env, ELECTRON_RUN_AS_NODE: '1', NODE_OPTIONS: '' },
     })
   }
+  installUniverPreviewBridge(profile, backup)
   console.log('PureGamma Harness plugins installed. Backup: ' + backup)
 }

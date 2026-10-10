@@ -43,6 +43,8 @@
 
 Codex 与 Claude Code 子智能体组合已包含在上游源码和运行时中；服务提供商仍需本机配置。内置代码不提供任何账户、订阅或 API 凭据。能力图标栏展示已挂载的插件，置顶选择保存在设备上；部分入口打开相应设置或工具面板，而非独立页面。
 
+安装程序为内置 `dsh-univer-office` 0.3.7 客户端加入预览兼容修复。原生调用和嵌套代码工具调用均可生成会话审阅卡片与实时窗口；在右侧边栏打开 `.univer` 文件即可使用文件预览。修复订阅当前轮次的 Chat 工具数据源，因此嵌套调用结果无需刷新整个会话即可显示。插件设置与依赖版本保持不变，原客户端会备份；无法识别的 0.3.7 构建会拒绝修改，其他版本保持原样。可读实现位于 `plugin-patches/univer-office`。
+
 <a id="build-and-verify"></a>
 
 ## 构建与验证
@@ -55,6 +57,6 @@ Codex 与 Claude Code 子智能体组合已包含在上游源码和运行时中�
 | Apple Silicon Mac | `pnpm run package:desktop:mac:arm64:unsigned --dir` |
 | Windows x64 | `pnpm run package:desktop:win:x64:unsigned` |
 
-手动[发布构建工作流](../.github/workflows/puregamma-desktop-release.yml)在独立原生主机上构建 Windows 和 Apple Silicon 版本。源码包来自发布提交。运行 `node --test pg-harness/install.test.mjs` 验证配置保留行为。对应的客户端与桌面测试覆盖品牌、会话预览及打包约定。
+手动[发布构建工作流](../.github/workflows/puregamma-desktop-release.yml)在独立原生主机上构建 Windows 和 Apple Silicon 版本。源码包来自发布提交。运行 `node --test pg-harness/install.test.mjs pg-harness/plugin-patches/univer-office/preview.test.mjs` 验证配置保留与办公预览回归。预览测试通过真实 React 运行已发布客户端，并包含未修补客户端缺失预览的对照场景。对应的客户端与桌面测试覆盖品牌及打包约定。
 
 应用的资源目录包含本目录。Windows 配套程序与 Mac 命令使用内置运行时执行 `install.mjs`，将可选插件添加到专用桌面配置中。适用上游 MIT 许可证和第三方声明，像素字体许可证包含在 `licenses` 下。
