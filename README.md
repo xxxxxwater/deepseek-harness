@@ -1,6 +1,8 @@
-# DeepSeek Harness
+# PureGamma Harness
 
 English | [中文](README.zh.md)
+
+PureGamma Harness is a customized desktop edition of DeepSeek Harness. [Download a release](https://github.com/xxxxxwater/deepseek-harness/releases) or read the [installation guide](pg-harness/README.md).
 
 DeepSeek Harness (`dsh`) is an open-source agent harness developed by [DeepSeek AI](https://deepseek.com).
 

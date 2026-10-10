@@ -1,6 +1,8 @@
-# DeepSeek Harness
+# PureGamma Harness
 
 [English](README.md) | 中文
+
+PureGamma Harness 是基于 DeepSeek Harness 的桌面定制版本；[下载首个版本](https://github.com/xxxxxwater/deepseek-harness/releases)或阅读[安装说明](pg-harness/README.zh.md)。
 
 DeepSeek Harness（`dsh`）是由 [DeepSeek AI](https://deepseek.com) 开发的开源 agent harness（智能体框架）。
 

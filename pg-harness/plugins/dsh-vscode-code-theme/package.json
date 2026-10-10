@@ -1,0 +1,21 @@
+{
+  "name": "dsh-vscode-code-theme",
+  "version": "0.1.0",
+  "description": "本地 VS Code 风格代码配色：Dark+ / Light+，可在插件页关闭。",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [],
+      "platform": "web"
+    }
+  }
+}

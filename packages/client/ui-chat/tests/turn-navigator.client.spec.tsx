@@ -25,6 +25,18 @@ const items: readonly TurnRailItem[] = Array.from({ length: 1_000 }, (_, index) 
 const t = makeTranslate(zh, commonZh)
 
 describe('TurnNavigator', () => {
+  it('previews the request and response in a single-turn conversation', async () => {
+    installTurnNavigatorObserver()
+    const item: TurnRailItem = { ...items[0]!, prompt: 'Question for this session', response: 'Reply in this session' }
+    const onNavigate = vi.fn()
+    const view = render(<TurnNavigator items={[item]} activeTurn={1} busyTurn={null} onNavigate={onNavigate} t={t} />)
+    const mark = await view.findByRole('button', { name: '跳转到第 1 轮' })
+    fireEvent.pointerMove(mark)
+    expect(view.getByRole('tooltip').textContent).toBe('Question for this sessionReply in this session')
+    fireEvent.click(mark)
+    expect(onNavigate).toHaveBeenCalledExactlyOnceWith(item)
+  })
+
   it('places the latest committed active turn on its first viewport size without scroll commands', () => {
     const observer = installTurnNavigatorObserver(null)
     const onNavigate = vi.fn()

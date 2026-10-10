@@ -109,7 +109,7 @@ function TurnNavigatorRail(
   }, [])
   const virtualizer = useVirtualizer<HTMLDivElement, HTMLButtonElement>({
     count: items.length,
-    enabled: items.length >= 2,
+    enabled: items.length >= 1,
     directDomUpdates: true,
     directDomUpdatesMode: 'transform',
     useScrollendEvent: true,
@@ -224,7 +224,7 @@ function TurnNavigatorRail(
     scrollToIndex(activeIndex, 'if-needed', behavior)
   }, [activeIndex, items.length, viewHeight, scrollToIndex])
 
-  if (items.length < 2) return null
+  if (items.length === 0) return null
   const preview = previewIndex === undefined ? undefined : items[previewIndex]
   const previewPosition = virtualItems.find(item => item.index === previewIndex)
   const fadeClasses = [css.scroller]

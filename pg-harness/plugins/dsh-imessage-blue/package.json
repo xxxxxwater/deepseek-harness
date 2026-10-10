@@ -1,0 +1,21 @@
+{
+  "name": "dsh-imessage-blue",
+  "version": "0.1.0",
+  "description": "iMessage 风格深蓝消息气泡和发送控件，可随时关闭。",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [],
+      "platform": "web"
+    }
+  }
+}

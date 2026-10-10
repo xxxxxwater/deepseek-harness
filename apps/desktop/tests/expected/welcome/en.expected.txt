@@ -1,6 +1,6 @@
-DeepSeek Harness
-DeepSeek Harness
-Welcome to DeepSeek Harness
+PureGamma Harness
+PureGamma Harness
+Welcome to PureGamma Harness
 Build potential. Explore intelligence.
 Sign in
 Add API Key

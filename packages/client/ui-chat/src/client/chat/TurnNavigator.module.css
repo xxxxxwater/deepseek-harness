@@ -26,11 +26,11 @@
   --turn-rail-band: calc(
     var(--dsh-conversation-viewport-height, 100dvh) - var(--dsh-composer-height, 152px)
   );
-  --turn-preview-height: 100px;
+  --turn-preview-height: 220px;
 
   position: absolute;
   top: calc(var(--turn-rail-band) / 2);
-  right: 12px;
+  left: 8px;
   width: 28px;
   /* Fixed-pitch marks never compress: a ladder taller than the band scrolls
      inside this frame instead of pushing marks under the composer or above
@@ -158,9 +158,9 @@
     calc(var(--turn-preview-center) - var(--turn-preview-height) / 2),
     calc(100% - var(--turn-preview-height))
   );
-  right: calc(100% + 10px);
+  left: calc(100% + 10px);
   box-sizing: border-box;
-  width: min(300px, calc(100cqw - 120px));
+  width: min(420px, calc(100cqw - 64px));
   max-height: var(--turn-preview-height);
   overflow: hidden;
   padding: 10px 12px;
@@ -183,14 +183,14 @@
 
 .previewPrompt {
   font: var(--dsw-font-xs-strong-13);
-  -webkit-line-clamp: 1;
+  -webkit-line-clamp: 4;
 }
 
 .previewResponse {
   margin-top: 4px;
   color: var(--dsw-alias-label-caption);
   font: var(--dsw-font-xxs-12);
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 4;
 }
 
 @keyframes dsh-turn-preview-enter {
@@ -204,7 +204,7 @@
   50% { opacity: 0.35; }
 }
 
-@container (max-width: 900px) {
+@container (max-width: 280px) {
   .frame {
     display: none;
   }

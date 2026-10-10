@@ -1,0 +1,22 @@
+{
+  "name": "dsh-pixel-font",
+  "version": "0.1.0",
+  "description": "PureGamma Harness 中英文像素字体，保留字号与颜色。",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./package.json": "./package.json"
+  },
+  "license": "MIT",
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [],
+      "platform": "web"
+    }
+  }
+}
