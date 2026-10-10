@@ -1,0 +1,41 @@
+name: PureGamma plugin compatibility
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'pg-harness/**'
+      - '.github/workflows/puregamma-plugin-compat.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  bundled-plugin-compat:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Inspect shipped plugin entry points
+        run: |
+          echo '=== MagicPath archive paths ==='
+          tar -tzf pg-harness/bundled-plugins/dsh-magicpath-0.1.0.tgz | head -40
+          echo '=== MagicPath tool output schema declarations ==='
+          for path in $(tar -tzf pg-harness/bundled-plugins/dsh-magicpath-0.1.0.tgz | grep -E '^package/.*\\.(js|mjs)$'); do
+            echo "-- $path"
+            tar -xOzf pg-harness/bundled-plugins/dsh-magicpath-0.1.0.tgz "$path" | grep -n -E -C 8 'output:|returns:|register\\(|defineTool|returnType|resultType' | head -170 || true
+          done
+          echo '=== Billion-context packaged fetch code ==='
+          tar -tzf pg-harness/bundled-plugins/billion-context-0.1.190.tgz | grep -E 'fetch-chain|dsh-native\\.js$|package.json$' | head -30
+          for path in $(tar -tzf pg-harness/bundled-plugins/billion-context-0.1.190.tgz | grep -E '^package/dist/agent/dsh-native\\.js$|^package/dist/agent/fetch-chain/.*\\.js$'); do
+            echo "-- $path"
+            tar -xOzf pg-harness/bundled-plugins/billion-context-0.1.190.tgz "$path" | grep -n -E -C 3 'installFetchChain|globalThis\\.fetch|diagnostics_channel|fetch patch|fetch-chain|native-fetch-chain' | head -100 || true
+          done
+      - name: Existing installer regression
+        run: node --test pg-harness/install.test.mjs
