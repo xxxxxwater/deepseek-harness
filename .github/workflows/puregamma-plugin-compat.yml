@@ -32,5 +32,15 @@ jobs:
           tar -tzf pg-harness/bundled-plugins/billion-context-0.1.190.tgz | grep -E 'dist/.+js$' | head -55 || true
           echo '=== billion-context package metadata ==='
           tar -xOzf pg-harness/bundled-plugins/billion-context-0.1.190.tgz package/package.json | head -75
+      - name: Inspect billion-context's shipped fetch interposition
+        run: |
+          tar -xOzf pg-harness/bundled-plugins/billion-context-0.1.190.tgz package/dist/agent/dsh-native.js > /tmp/bili-native.js
+          node --input-type=module -e '
+            import fs from "node:fs";
+            const s=fs.readFileSync("/tmp/bili-native.js","utf8");
+            for (const term of ["function shouldReclaimFetchPatch", "function installFetchChain", "BILI_RECLAIM_FETCH_PATCH", "Object.defineProperty(globalThis, \"fetch\"", "globalThis.fetch = top"]) {
+              const p=s.indexOf(term); console.log("TERM",term,"OFFSET",p,"SOURCE",p<0?"<absent>":s.slice(Math.max(0,p-180),p+680));
+            }
+          '
       - name: Existing installer regression
         run: node --test pg-harness/install.test.mjs
