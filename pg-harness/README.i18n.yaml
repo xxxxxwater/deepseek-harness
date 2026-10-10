@@ -2,15 +2,15 @@
 # section, a hash of its English and Chinese blocks outside code blocks and generated regions.
 # After editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write pg-harness/README.md
-/puregamma-harness:
-  en: 2a93ca0c026588d5
-  zh: a5e2a4f61990fabc
-/puregamma-harness/install-on-intel-macos:
-  en: aa4d50efc7653883
-  zh: 7f1b588e004ebcdf
-/puregamma-harness/build-and-verify:
-  en: 2f978c46ac9c7bb3
-  zh: abc2919fba1ebd5d
-/puregamma-harness/bundled-plugins:
-  en: 146970f53460ed1c
-  zh: c11767a24dacb5c7
+/puregamma-harness-installation-and-plugins:
+  en: 30d8ea936067f023
+  zh: d25db53b87c18a59
+/puregamma-harness-installation-and-plugins/installation:
+  en: 4cdfa85afabc1e56
+  zh: f6803f6b12fdf35c
+/puregamma-harness-installation-and-plugins/plugins-and-local-setup:
+  en: 2ce9eb912dc7baae
+  zh: 8181b74561794512
+/puregamma-harness-installation-and-plugins/build-and-verify:
+  en: 73d5446fb497ecd4
+  zh: e97e2b0abe896c0c

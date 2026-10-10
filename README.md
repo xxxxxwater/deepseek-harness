@@ -2,78 +2,91 @@
 
 English | [中文](README.zh.md)
 
-PureGamma Harness is a customized desktop edition of DeepSeek Harness. [Download a release](https://github.com/xxxxxwater/deepseek-harness/releases) or read the [installation guide](pg-harness/README.md).
+![PureGamma Harness swallow](pg-harness/assets/pg-harness-mark-ui.png)
 
-DeepSeek Harness (`dsh`) is an open-source agent harness developed by [DeepSeek AI](https://deepseek.com).
+PureGamma Harness brings coding, browser automation, office work, skills, and context tools into one customizable agent workspace. This desktop edition builds on DeepSeek Harness `dsh-v0.2.1-alpha.2` and preserves its plugin architecture. The first PureGamma release is `puregamma-harness-v0.1.0`; the bundled engine reports its real version, `0.2.1-alpha.2`.
 
-It is built on an **everything-is-a-plugin** architecture and powered by [Cordis](https://github.com/cordiverse/cordis), whose design is described in [_A Programming Paradigm for Spatiotemporal Composability_](https://arxiv.org/abs/2608.25512).
+[Download the desktop release](https://github.com/xxxxxwater/deepseek-harness/releases) · [Installation and plugin guide](pg-harness/README.md) · [User guide](docs/user/guide/index.md)
 
-Documentation: [https://deepseek-harness.github.io/deepseek-harness/](https://deepseek-harness.github.io/deepseek-harness/)
+<a id="harness-capabilities"></a>
 
-## Developer preview
+## Harness capabilities
 
-DeepSeek Harness is in _developer preview_ and iterating rapidly. **THERE WILL BE COMPATIBILITY-BREAKING CHANGES.**
+Use one conversation to work with files, run commands, inspect code changes, and coordinate coding agents. Choose a model and configure its credentials locally. The Harness supports Web and Desktop interfaces, project and user skills, external tools, and recoverable local conversations. Its Cordis architecture lets plugins extend both the agent tools and the interface.
 
-Review the [safety notice](SAFETY.md) before running the project.
+| Capability | What you can do |
+| --- | --- |
+| Coding workspace | Read and edit project files, run commands, inspect changes, and use Codex or Claude Code subagents when configured. |
+| Context management | Inspect context composition, review conversation turns, and use installed compression or memory plugins. |
+| Browser and design | Drive the browser with ego-browser and invoke MagicPath through its bridge. |
+| Office work | Preview and collaborate on documents and spreadsheets with Univer; the desktop runtime also includes office conversion tools. |
+| Skills and tools | Browse skills, reference workspace paths with `@`, and connect SentinelX tools through its authenticated bridge. |
+| Plugin ecosystem | Discover community packages in the plugin market and customize the workspace without replacing the core. |
 
-## Run
+<a id="a-desktop-built-around-plugins"></a>
 
-### Run from `npm`
+## A desktop built around plugins
 
-Install `Node.js`, then run:
+The permanent left rail exposes plugin capabilities as vector icons. Hover an icon to see its name and version; use the ellipsis menu to browse the remaining entries and pin favorites. The rail stays available when the sidebar is hidden, and its top edge leaves room for the macOS window controls.
+
+The conversation turn rail displays compact marks beside the conversation. Hover a mark to preview that turn's question and reply, then click to jump to it. PureGamma's swallow and full pixel wordmark appear across the application. Code blocks use IDE-style syntax contrast, messages and sending controls use deep blue, and Chinese/English pixel fonts preserve the existing text sizes and colors.
+
+<a id="included-plugin-capabilities"></a>
+
+## Included plugin capabilities
+
+The edition includes 13 third-party plugin code archives, four PureGamma UI packages, and the official bundles in the [versioned inventory](pg-harness/bundled-plugins/inventory.json). The source archive includes the same plugin code. Existing installed versions and settings take precedence during installation.
+
+| Plugin group | Included packages |
+| --- | --- |
+| Context and memory | `dsh-context`, `billion-context`, `@vectorize-io/hindsight-coding-agents` |
+| Coding workspace | `dsh-better-sidebar`, `dsh-at-file` |
+| Skills | `@linxin666/dsh-client-ui-skill-explorer`, `@dhicoc/dsh-reverse-skill` |
+| Browser, design, and tool bridges | `dsh-ego-browser`, `dsh-magicpath`, `dsh-sentinelx` |
+| Office and discovery | `dsh-univer-office`, `dshmarket` |
+| Visual customization | `open-sea-skin`, PureGamma plugin rail, code theme, blue bubbles, and pixel fonts |
+
+Plugin code is included; services such as MagicPath, SentinelX, and Hindsight still require their own local setup or authentication. Installation does not prove that a provider connection has been configured. See the [plugin guide](pg-harness/README.md#plugins-and-local-setup) for details.
+
+<a id="choose-a-download"></a>
+
+## Choose a download
+
+Select the artifact that matches your machine. Both Mac archives contain the app and a plugin installer; the Windows EXE contains the application and bundled plugin code. Read the [installation steps](pg-harness/README.md#installation) before first launch.
+
+| Artifact | Target |
+| --- | --- |
+| Windows EXE | Windows x64 |
+| Intel macOS ZIP | Intel Mac, x86_64 |
+| Apple Silicon macOS ZIP | M-series Mac, arm64 |
+| Source ZIP | Complete tracked source and bundled plugin archives |
+
+Personal conversations, context records, API keys, and local profile files are excluded from the release. An upgrade preserves those files on your computer. These community builds do not use an Apple Developer ID or a Windows signing certificate; Mac builds are ad-hoc signed and are not notarized.
+
+<a id="run"></a>
+
+<a id="run-from-source"></a>
+
+<a id="build-from-source"></a>
+
+## Build from source
+
+Install Node.js 24 and the repository's pnpm version, then clone this edition's `master` branch:
 
 ```sh
-npx @deepseek-ai/dsh web
-```
-
-The command starts the Web UI at `http://127.0.0.1:3080` by default and opens it in the default browser for a local launch. An SSH launch only prints the host URL because the SSH client or editor owns the local forwarded address. Pass `--no-open` to run the server without opening a browser. See [Web UI guide](docs/user/guide/index.md).
-
-### Run from source
-
-To run from a repository checkout:
-
-```sh
-git clone https://github.com/deepseek-ai/deepseek-harness.git
+git clone --branch master https://github.com/xxxxxwater/deepseek-harness.git
 cd deepseek-harness
-pnpm install
+pnpm install --frozen-lockfile
 pnpm run build
 pnpm dsh web
 ```
 
-`pnpm run build` prepares the repository artifacts. `pnpm dsh web` uses those built artifacts without rebuilding.
+The Web command starts the built UI at `http://127.0.0.1:3080`. Use the [desktop build guide](pg-harness/README.md#build-and-verify) to create native installers with the bundled runtime and plugins. Native desktop builds require a matching operating system and architecture.
 
-## Community and support
+<a id="development-and-attribution"></a>
 
-- Submit feedback or bug reports through [GitHub Discussions](https://github.com/deepseek-ai/deepseek-harness/discussions).
-- Add the [`dsh-plugin`](https://github.com/topics/dsh-plugin) topic to your plugin repository for discoverability.
-- Join <a href="https://discord.gg/4MrtZUhpxg">DeepSeek Harness Discord community</a>.
+## Development and attribution
 
-## Contributing
+Read the [development guide](docs/development.md), [architecture](docs/architecture.md), and [contribution guide](CONTRIBUTING.md). Agents follow [AGENTS.md](AGENTS.md). The upstream project remains in developer preview and can introduce compatibility changes; read its [safety notice](SAFETY.md).
 
-See [CONTRIBUTING.md](CONTRIBUTING.md).
-
-## Development
-
-Start with the [development guide](docs/development.md) and [architecture documentation](docs/architecture.md).
-
-`pnpm run dev:web` builds, serves, and rebuilds client bundles on source edits in one terminal, and `make help` lists the matching Make targets for Web and Desktop; the guide's application commands section owns the full table.
-
-For agents, follow [AGENTS.md](AGENTS.md).
-
-## Citation
-
-```bibtex
-@misc{deepseek-harness2026,
-  title={DeepSeek Harness: Everything is a Plugin},
-  author={DeepSeek-AI},
-  year={2026},
-  publisher={GitHub},
-  howpublished={\url{https://github.com/deepseek-ai/deepseek-harness}},
-}
-```
-
-## License
-
-[MIT](LICENSE)
-
-Third-party dependencies and their licenses are disclosed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+PureGamma Harness is a [PG Research](https://pgresearch.org/) customization of [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness), developed by DeepSeek AI and powered by [Cordis](https://github.com/cordiverse/cordis). Original package identities and provider names remain intact for compatibility. The project uses the [MIT license](LICENSE); dependencies and plugin archives retain their own notices, including [third-party notices](THIRD_PARTY_NOTICES.md) and the pixel font's bundled licenses.

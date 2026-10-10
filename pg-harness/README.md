@@ -1,21 +1,60 @@
-# PureGamma Harness
+# PureGamma Harness installation and plugins
 
 English | [中文](README.zh.md)
 
-PureGamma Harness is a PG Research desktop edition of DeepSeek Harness, based on the upstream `dsh-v0.2.1-alpha.2` source. The first PureGamma edition is `puregamma-harness-v0.1.0`; the compatible bundled engine and application version remain `0.2.1-alpha.2`.
+Install the release for your computer, add the bundled plugin capabilities, and continue using your existing local Harness data. The edition release is `puregamma-harness-v0.1.0`; the actual engine version is `0.2.1-alpha.2`.
 
-The PureGamma Research swallow inspired the new application artwork. PureGamma Harness replaces the desktop, welcome, sidebar, conversation hero, and browser icons. The plugin rail starts below the macOS window controls, stays visible when the sidebar is collapsed, and provides plugin name/version previews, a more menu, and device-local pins. The conversation turn rail previews real questions and replies and jumps to the selected turn. Optional UI packages provide IDE code colors, deep-blue message bubbles, and Chinese/English pixel typography without changing sizes or colors.
+<a id="installation"></a>
 
-## Install on Intel macOS
+## Installation
 
-Download the release ZIP, extract it, move `PureGamma Harness.app` to your preferred location, quit any running Harness instance, and run the included `Install PureGamma Harness.command` beside the app. The command uses the app's bundled runtime, installs the bundled plugins, and launches the app. No system Node installation is required. A fresh installation downloads any missing plugin libraries; existing installed plugin versions take precedence. This build is ad-hoc signed and has not been Apple notarized.
+Quit all Harness instances before installing plugins. The installer preserves existing dependencies, settings, sessions, and credentials, and writes reversible configuration backups under `.dsh/pg-harness-backups`. A fresh installation needs network access to download missing plugin libraries; no system Node.js installation is required.
 
-The existing `.dsh` sessions, settings, credentials, and third-party plugins remain local. The application id and Electron data directory stay compatible with the upstream desktop installation. The UI installer preserves other profile dependencies and configuration and writes a backup under `.dsh/pg-harness-backups`. No personal profile or credentials are included in the source or release.
+| Platform | Steps |
+| --- | --- |
+| Intel Mac | Extract the x64 ZIP. Keep `Install PureGamma Harness.command` beside `PureGamma Harness.app`, run it once, then launch the app. |
+| M-series Mac | Extract the arm64 ZIP and run the same adjacent command. Use the arm64 app on Apple Silicon. |
+| Windows x64 | Run the EXE installer and quit the app if it opens. In the installed application folder, run `resources/pg-harness/Install PureGamma Harness.cmd`, then open the app. |
+| Source | Extract the source ZIP or clone this repository. Follow the build steps below. |
+
+You can move the Mac app after plugin installation. Mac builds are ad-hoc signed and have not been Apple notarized; the Windows build is unsigned. The application id and Electron data directory remain compatible with the upstream desktop installation. Personal conversations, context records, API credentials, and user profiles are excluded from every published artifact.
+
+<a id="plugins-and-local-setup"></a>
+
+## Plugins and local setup
+
+The [inventory](bundled-plugins/inventory.json) records 13 third-party plugin archives, their exact versions, licenses, SHA-256 hashes, and the official bundles. The installer validates each new archive and retains an existing dependency's version and source. Four PureGamma UI packages add the plugin rail, IDE code colors, blue messages, and Chinese/English pixel typography.
+
+| Package | Capability and setup |
+| --- | --- |
+| `dsh-context` | Inspect how the context is composed and how it changes. |
+| `billion-context` | Compress conversation context; configure its model-related settings locally. |
+| `@vectorize-io/hindsight-coding-agents` | Integrate long-term coding memory; configure a Hindsight connection locally. |
+| `dsh-better-sidebar` | Browse files, edit, inspect changes, and access workspace panels beside a conversation. |
+| `dsh-at-file` | Find and reference workspace paths with `@`. |
+| `@linxin666/dsh-client-ui-skill-explorer` | Browse and manage skills from available sources. |
+| `@dhicoc/dsh-reverse-skill` | Route reverse-engineering and authorized security-research skills. |
+| `dsh-ego-browser` | Automate the browser and watch its live panel; install the plugin's required browser locally. |
+| `dsh-magicpath` | Invoke MagicPath from a session; authenticate its CLI locally. |
+| `dsh-sentinelx` | Connect SentinelX tools; complete the hub's OAuth authorization locally. |
+| `dsh-univer-office` | Preview and collaborate on office files through its gateway and viewer. |
+| `dshmarket` | Browse, search, and install community plugins. |
+| `open-sea-skin` | Display an optional ocean skin where WebGPU is supported. |
+
+Codex and Claude Code subagent bundles are part of the upstream source and runtime; their providers require local configuration. Included code does not supply any account, subscription, or API credentials. The capability rail shows mounted plugins and keeps pinned choices on the device; some entries open the relevant settings or tool panel rather than a dedicated page.
+
+<a id="build-and-verify"></a>
 
 ## Build and verify
 
-Use the repository's supported `pnpm run package:desktop:mac:x64:unsigned --dir` build. The app carries this directory in `Contents/Resources/pg-harness`. Run `node --test pg-harness/install.test.mjs` for the profile-preservation checks, and the owning client and desktop tests for brand and turn-preview changes. The upstream MIT license and third-party notices apply; package names and provider identifiers retain their original values.
+Use Node.js 24, the pnpm version in `package.json`, and a native host that matches the target. Install the locked dependencies before building. Each packaging command builds the source, prepares the runtime, and runs the packaged-runtime smoke checks.
 
-## Bundled plugins
+| Target | Command |
+| --- | --- |
+| Intel Mac | `pnpm run package:desktop:mac:x64:unsigned --dir` |
+| Apple Silicon Mac | `pnpm run package:desktop:mac:arm64:unsigned --dir` |
+| Windows x64 | `pnpm run package:desktop:win:x64:unsigned` |
 
-The release includes 13 third-party plugin code archives, 4 PureGamma UI packages, and the official bundles named in [the inventory](bundled-plugins/inventory.json). Archives preserve the installed package versions and their upstream notices. The installer verifies SHA-256 values, retains existing plugin dependency sources, and adds missing packages. Plugin authentication must be configured locally; no sessions, context records, API credentials, or personal profile files are shipped.
+The manual [release build workflow](../.github/workflows/puregamma-desktop-release.yml) builds Windows and Apple Silicon on separate native runners. The source archive comes from the release commit. Run `node --test pg-harness/install.test.mjs` for profile-preservation checks. The owning client and desktop tests cover the brand, conversation previews, and packaging contracts.
+
+The app carries this directory in its resources. The Windows helper and Mac command use the bundled runtime to run `install.mjs`; optional plugins are added to the reserved desktop profile. The upstream MIT license and third-party notices apply, and the pixel font licenses are included under `licenses`.

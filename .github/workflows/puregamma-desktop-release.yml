@@ -1,0 +1,118 @@
+name: PureGamma desktop release builds
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: puregamma-desktop-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  windows:
+    name: Windows x64 EXE
+    runs-on: windows-2025
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: pwsh
+    env:
+      DSH_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v5.0.0
+        with:
+          dest: ${{ runner.temp }}/puregamma-pnpm
+      - uses: actions/setup-node@v7.0.0
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Install locked dependencies
+        run: |
+          pnpm install --frozen-lockfile
+          exit $LASTEXITCODE
+      - name: Verify plugin installation preserves user data
+        run: |
+          node --test pg-harness/install.test.mjs
+          exit $LASTEXITCODE
+      - name: Build EXE and verify packaged runtime
+        run: |
+          pnpm run package:desktop:win:x64:unsigned
+          exit $LASTEXITCODE
+      - name: Stage verified installer
+        run: |
+          New-Item -ItemType Directory -Path release-assets | Out-Null
+          $installers = @(Get-ChildItem apps/desktop/.desktop-build/targets/win-x64/unsigned-artifacts/*.exe)
+          if ($installers.Count -ne 1) { throw 'Expected one verified EXE installer' }
+          Copy-Item -LiteralPath $installers[0].FullName -Destination release-assets/puregamma-harness-v0.1.0-windows-x64.exe
+      - uses: actions/upload-artifact@v7.0.1
+        with:
+          name: puregamma-windows-x64
+          path: release-assets/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14
+      - name: Retain packaging diagnostics
+        if: always()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: puregamma-windows-diagnostics
+          path: apps/desktop/.desktop-build/packaging-runs/
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 14
+  mac-arm64:
+    name: Apple Silicon macOS
+    runs-on: macos-15
+    timeout-minutes: 120
+    env:
+      DSH_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v5.0.0
+        with:
+          dest: ${{ runner.temp }}/puregamma-pnpm
+      - uses: actions/setup-node@v7.0.0
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Confirm native architecture
+        run: test "$(uname -m)" = arm64
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Verify plugin installation preserves user data
+        run: node --test pg-harness/install.test.mjs
+      - name: Build app and verify packaged runtime
+        run: pnpm run package:desktop:mac:arm64:unsigned --dir
+      - name: Stage app, plugin installer, and guides
+        run: |
+          mkdir -p release-assets stage/PureGamma-Harness-0.1.0
+          cp -R 'apps/desktop/.desktop-build/targets/mac-arm64/unsigned-artifacts/mac-arm64/PureGamma Harness.app' stage/PureGamma-Harness-0.1.0/
+          cp 'pg-harness/Install PureGamma Harness.command' pg-harness/README.md pg-harness/README.zh.md stage/PureGamma-Harness-0.1.0/
+          chmod +x 'stage/PureGamma-Harness-0.1.0/Install PureGamma Harness.command'
+          mkdir -p stage/PureGamma-Harness-0.1.0/bundled-plugins
+          cp pg-harness/bundled-plugins/inventory.json stage/PureGamma-Harness-0.1.0/bundled-plugins/
+          codesign --verify --deep --strict 'stage/PureGamma-Harness-0.1.0/PureGamma Harness.app'
+          ditto -c -k --sequesterRsrc --keepParent stage/PureGamma-Harness-0.1.0 release-assets/puregamma-harness-v0.1.0-macos-arm64.zip
+      - uses: actions/upload-artifact@v7.0.1
+        with:
+          name: puregamma-macos-arm64
+          path: release-assets/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14
+      - name: Retain packaging diagnostics
+        if: always()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: puregamma-macos-diagnostics
+          path: apps/desktop/.desktop-build/packaging-runs/
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 14

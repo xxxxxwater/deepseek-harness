@@ -39,9 +39,9 @@ export function install(home = process.env.DSH_HOME || join(homedir(), '.dsh')) 
     if (existsSync(link) || (() => { try { return lstatSync(link).isSymbolicLink() } catch { return false } })()) {
       if (!lstatSync(link).isSymbolicLink() || resolve(dirname(link), readlinkSync(link)) !== resolve(destination)) {
         renameSync(link, join(backup, name + '-previous-link'))
-        symlinkSync(destination, link, 'dir')
+        symlinkSync(destination, link, 'junction')
       }
-    } else symlinkSync(destination, link, 'dir')
+    } else symlinkSync(destination, link, 'junction')
     manifest.dependencies[name] = 'link:../../local-plugins/' + name
     if (!manifest.dsh.profile.bundles.includes(name)) manifest.dsh.profile.bundles.push(name)
   }

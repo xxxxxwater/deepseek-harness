@@ -2,97 +2,91 @@
 
 [English](README.md) | 中文
 
-PureGamma Harness 是基于 DeepSeek Harness 的桌面定制版本；[下载首个版本](https://github.com/xxxxxwater/deepseek-harness/releases)或阅读[安装说明](pg-harness/README.zh.md)。
+![PureGamma Harness 燕子标志](pg-harness/assets/pg-harness-mark-ui.png)
 
-DeepSeek Harness（`dsh`）是由 [DeepSeek AI](https://deepseek.com) 开发的开源 agent harness（智能体框架）。
+PureGamma Harness 将编程、浏览器自动化、办公、技能和上下文工具整合进一个可定制的智能体工作区。桌面版基于 DeepSeek Harness `dsh-v0.2.1-alpha.2`，保留其插件架构。首个 PureGamma 版本为 `puregamma-harness-v0.1.0`；内置引擎仍显示真实版本 `0.2.1-alpha.2`。
 
-它构建于**一切皆插件**的架构之上，由 [Cordis](https://github.com/cordiverse/cordis) 驱动，其设计参见论文 [_A Programming Paradigm for Spatiotemporal Composability_](https://arxiv.org/abs/2608.25512)。
+[下载桌面版](https://github.com/xxxxxwater/deepseek-harness/releases) · [安装与插件说明](pg-harness/README.zh.md) · [用户指南](docs/user/guide/index.zh.md)
 
-文档：[https://deepseek-harness.github.io/deepseek-harness/](https://deepseek-harness.github.io/deepseek-harness/)
+<a id="harness-capabilities"></a>
 
-## 开发者预览
+## Harness 能力
 
-DeepSeek Harness 处于 _开发者预览_ 阶段，正在快速迭代。**未来将出现破坏兼容性的变更。**
+在同一个会话里操作文件、执行命令、检查代码变更，并协调编程智能体。选择模型后，在本机配置凭据。Harness 提供 Web 与桌面界面、项目和用户技能、外部工具，以及可恢复的本地会话。Cordis 架构允许插件同时扩展智能体工具和应用界面。
 
-运行本项目前，请阅读[安全说明](SAFETY.zh.md)。
+| 能力 | 可以完成的工作 |
+| --- | --- |
+| 编程工作区 | 读取和编辑项目文件、执行命令、检查变更，并在配置后使用 Codex 或 Claude Code 子智能体。 |
+| 上下文管理 | 查看上下文构成、回顾会话轮次，并使用已安装的压缩或记忆插件。 |
+| 浏览器与设计 | 使用 ego-browser 操作浏览器，通过桥接插件调用 MagicPath。 |
+| 办公 | 使用 Univer 预览和协作文档、表格；桌面运行时还包含办公文件转换工具。 |
+| 技能与工具 | 浏览技能、通过 `@` 引用工作区路径，并通过认证桥接接入 SentinelX 工具。 |
+| 插件生态 | 在插件市场发现社区插件，扩展工作区而无需替换核心。 |
+
+<a id="a-desktop-built-around-plugins"></a>
+
+## 围绕插件设计的桌面界面
+
+常驻左侧图标栏以矢量图标展示插件能力。鼠标悬停可查看名称和版本；通过省略号菜单浏览其他入口并置顶常用项。侧边栏隐藏时图标栏仍可使用，其顶部为 macOS 窗口按钮留出空间。
+
+会话轮次导航在对话旁显示紧凑的刻度。悬停可预览对应轮次的提问与回复，点击可跳转。应用统一使用 PureGamma 燕子标志和完整的像素字标。代码块采用 IDE 风格的语法对比，消息与发送控件使用深蓝色，中英文字体采用像素字体并保留既有字号与颜色。
+
+<a id="included-plugin-capabilities"></a>
+
+## 内置插件能力
+
+此版本包含 13 个第三方插件代码归档、4 个 PureGamma 界面插件，以及[版本清单](pg-harness/bundled-plugins/inventory.json)中的官方插件组合。源码包包含相同的插件代码。安装时优先保留已有插件版本和设置。
+
+| 插件分组 | 包含的插件 |
+| --- | --- |
+| 上下文与记忆 | `dsh-context`、`billion-context`、`@vectorize-io/hindsight-coding-agents` |
+| 编程工作区 | `dsh-better-sidebar`、`dsh-at-file` |
+| 技能 | `@linxin666/dsh-client-ui-skill-explorer`、`@dhicoc/dsh-reverse-skill` |
+| 浏览器、设计与工具桥接 | `dsh-ego-browser`、`dsh-magicpath`、`dsh-sentinelx` |
+| 办公与插件发现 | `dsh-univer-office`、`dshmarket` |
+| 视觉定制 | `open-sea-skin`、PureGamma 插件图标栏、代码主题、蓝色气泡与像素字体 |
+
+插件代码已经包含；MagicPath、SentinelX、Hindsight 等服务仍需各自在本机完成配置或认证。安装插件不等于已配置服务连接。详见[插件说明](pg-harness/README.zh.md#plugins-and-local-setup)。
+
+<a id="choose-a-download"></a>
+
+## 选择下载内容
+
+选择与本机匹配的文件。两个 Mac 包均包含应用和插件安装程序；Windows EXE 包含应用及内置插件代码。首次启动前请阅读[安装步骤](pg-harness/README.zh.md#installation)。
+
+| 文件 | 适用平台 |
+| --- | --- |
+| Windows EXE | Windows x64 |
+| Intel macOS ZIP | Intel Mac，x86_64 |
+| Apple Silicon macOS ZIP | M 系列芯片 Mac，arm64 |
+| Source ZIP | 完整的已提交源码和插件归档 |
+
+发布内容不包含个人会话、上下文记录、API 密钥或本地配置文件。升级会保留电脑上的这些文件。社区构建未使用 Apple Developer ID 或 Windows 签名证书；Mac 版采用临时签名，未经 Apple 公证。
 
 <a id="run"></a>
 
-## 运行
-
-### 通过 `npm` 运行
-
-安装 `Node.js`，然后运行：
-
-```sh
-npx @deepseek-ai/dsh web
-```
-
-该命令默认会在 `http://127.0.0.1:3080` 启动 Web UI，本机启动时还会用默认浏览器打开页面。通过 SSH 启动时只打印宿主机 URL，因为本地转发地址由 SSH 客户端或编辑器持有。传入 `--no-open` 可仅运行服务器而不打开浏览器。详见 [Web UI 指南](docs/user/guide/index.zh.md)。
-
 <a id="run-from-source"></a>
 
-### 从源码运行
+<a id="build-from-source"></a>
 
-如需从仓库源码运行：
+## 从源码构建
+
+安装 Node.js 24 和仓库指定的 pnpm 版本，然后克隆本版本的 `master` 分支：
 
 ```sh
-git clone https://github.com/deepseek-ai/deepseek-harness.git
+git clone --branch master https://github.com/xxxxxwater/deepseek-harness.git
 cd deepseek-harness
-pnpm install
+pnpm install --frozen-lockfile
 pnpm run build
 pnpm dsh web
 ```
 
-`pnpm run build` 会准备仓库产物。`pnpm dsh web` 会直接使用这些已构建产物，不会重新构建。
+Web 命令会在 `http://127.0.0.1:3080` 启动已构建的界面。使用[桌面构建指南](pg-harness/README.zh.md#build-and-verify)生成包含运行时和插件的安装包。原生桌面构建需要匹配的操作系统和处理器架构。
 
-## 社区与支持
+<a id="development-and-attribution"></a>
 
-- 通过 [GitHub Discussions](https://github.com/deepseek-ai/deepseek-harness/discussions) 提交反馈或 bug 报告。
-- 为你的插件仓库添加 [`dsh-plugin`](https://github.com/topics/dsh-plugin) 话题，便于被发现。
-- 欢迎加入 DeepSeek Harness 企微群！扫描下方二维码填写入群问卷，小助手会定期发送入群邀请。
+## 开发与致谢
 
-<table>
-  <thead>
-    <tr>
-      <th align="center">入群问卷</th>
-      <th align="center">微信公众号</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td align="center"><a href="https://trtgsjkv6r.feishu.cn/share/base/form/shrcnIt5twSVdLGD52KJBckGCgg"><img src="https://cdn.deepseek.com/harness/readme/community-wecom-survey.png" alt="DeepSeek Harness 入群问卷二维码" width="180" height="180"></a></td>
-      <td align="center"><img src="https://cdn.deepseek.com/harness/readme/community-wechat-official-account.png" alt="DeepSeek Harness 团队微信公众号二维码" width="180" height="180"></td>
-    </tr>
-  </tbody>
-</table>
+阅读[开发指南](docs/development.zh.md)、[架构文档](docs/architecture.zh.md)和[贡献指南](CONTRIBUTING.zh.md)。智能体遵循 [AGENTS.md](AGENTS.md)。上游仍处于开发者预览阶段，可能引入兼容性变更；请阅读[安全说明](SAFETY.zh.md)。
 
-## 参与贡献
-
-参见 [CONTRIBUTING.md](CONTRIBUTING.zh.md)。
-
-## 开发
-
-请先阅读[开发指南](docs/development.zh.md)与[架构文档](docs/architecture.zh.md)。
-
-`pnpm run dev:web` 会在一个终端里完成构建、启动，并在源码修改时重建 client bundle；`make help` 列出 Web 与 Desktop 对应的 Make target。完整表格见开发指南的「应用命令」一节。
-
-面向 agent：请遵循 [AGENTS.md](AGENTS.md)。
-
-## 引用
-
-```bibtex
-@misc{deepseek-harness2026,
-  title={DeepSeek Harness: Everything is a Plugin},
-  author={DeepSeek-AI},
-  year={2026},
-  publisher={GitHub},
-  howpublished={\url{https://github.com/deepseek-ai/deepseek-harness}},
-}
-```
-
-## 许可证
-
-[MIT](LICENSE)
-
-第三方依赖及其许可证见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+PureGamma Harness 是 [PG Research](https://pgresearch.org/) 对 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 的定制，原项目由 DeepSeek AI 开发并由 [Cordis](https://github.com/cordiverse/cordis) 驱动。为兼容性保留原有包标识和服务提供商名称。项目使用 [MIT 许可证](LICENSE)；依赖与插件归档保留各自声明，包括[第三方声明](THIRD_PARTY_NOTICES.md)及内置像素字体许可证。
