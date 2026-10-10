@@ -1,0 +1,63 @@
+name: Stage verified PureGamma release assets
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_run:
+        description: Successful PureGamma native-build run ID
+        type: string
+        required: true
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: puregamma-stage-first-release
+  cancel-in-progress: false
+
+jobs:
+  stage:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      BUILD_RUN: ${{ inputs.build_run }}
+    steps:
+      - name: Bind artifacts to the existing draft and successful build
+        id: verify
+        run: |
+          [[ "$BUILD_RUN" =~ ^[0-9]+$ ]]
+          gh api "repos/$GH_REPO/actions/runs/$BUILD_RUN" > build-run.json
+          gh api "repos/$GH_REPO/releases/tags/puregamma-harness-v0.1.0" > release.json
+          node - <<'JS'
+          const fs = require('node:fs');
+          const run = JSON.parse(fs.readFileSync('build-run.json'));
+          const release = JSON.parse(fs.readFileSync('release.json'));
+          if (run.conclusion !== 'success' || run.path !== '.github/workflows/puregamma-desktop-release.yml') throw Error('Native builds must pass');
+          if (!release.draft || release.target_commitish !== run.head_sha) throw Error('Draft must target the verified build commit');
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, 'source_sha=' + run.head_sha + '\n');
+          JS
+      - uses: actions/checkout@v7.0.1
+        with:
+          ref: ${{ steps.verify.outputs.source_sha }}
+          persist-credentials: false
+      - name: Retrieve verified native artifacts
+        run: |
+          gh run download "$BUILD_RUN" --name puregamma-windows-x64 --dir release-assets/windows
+          gh run download "$BUILD_RUN" --name puregamma-macos-arm64 --dir release-assets/mac
+      - name: Archive the exact release source and all bundled plugin code
+        run: |
+          git archive --format=zip --prefix=PureGamma-Harness-0.1.0-source/ --output=release-assets/puregamma-harness-v0.1.0-source.zip HEAD
+          node - <<'JS'
+          const fs = require('node:fs');
+          const crypto = require('node:crypto');
+          const inventory = JSON.parse(fs.readFileSync('pg-harness/bundled-plugins/inventory.json'));
+          for (const p of inventory.plugins) {
+            if (crypto.createHash('sha256').update(fs.readFileSync('pg-harness/bundled-plugins/' + p.archive)).digest('hex') !== p.sha256) throw Error('Plugin archive integrity failed');
+          }
+          JS
+      - name: Upload to draft without publishing
+        run: |
+          gh release upload puregamma-harness-v0.1.0 --clobber release-assets/windows/*.exe release-assets/mac/*.zip release-assets/puregamma-harness-v0.1.0-source.zip
